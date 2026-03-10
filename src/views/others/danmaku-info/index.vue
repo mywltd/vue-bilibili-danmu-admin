@@ -1,6 +1,6 @@
 <template>
   <CommonPage>
-    <MeCrud ref="$table" v-model:query-items="queryItems" :columns="tableColumns" :get-data="api.read">
+    <MeCrud ref="$table" v-model:query-items="queryItems" :columns="tableColumns" :get-data="api.read" :get-data-export="api.export">
       <MeQueryItem label="UID" :label-width="70">
         <n-input v-model:value="queryItems.uid" type="text" placeholder="可模糊搜索" clearable />
       </MeQueryItem>
