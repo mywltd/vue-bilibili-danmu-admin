@@ -15,7 +15,7 @@
           <i class="i-fe:search mr-4" />
           {{ $t('common.Search') }}
         </n-button>
-        <n-button v-if="getDataExport" attr-type="submit" class="ml-20" type="primary" :loading="loadingExport" @click="handleExport">
+        <n-button v-if="getDataExport" class="ml-20" type="primary" :loading="loadingExport" @click="handleExport">
           <i class="i-fe:export mr-4" />
           {{ $t('common.Export') }}
         </n-button>
