@@ -38,6 +38,9 @@
       <MeQueryItem label="用户名称" :label-width="70">
         <n-input v-model:value="queryItems.uname" type="text" placeholder="可模糊搜索" clearable />
       </MeQueryItem>
+      <MeQueryItem label="礼物名称" :label-width="70">
+        <n-input v-model:value="queryItems.gift_name" type="text" placeholder="可模糊搜索" clearable />
+      </MeQueryItem>
       <MeQueryItem label="赠送时间" :label-width="70">
         <n-date-picker
           v-model:value="queryItems.create_date" type="datetimerange" clearable
@@ -59,6 +62,7 @@ const $table = ref(null)
 const queryItems = ref({
   uid: '', // 用户UID
   uname: '', // 用户名称
+  gift_name: '', // 礼物名称
   create_date: ref(null), // 赠送时间
 })
 const tableColumns = ref([
@@ -85,6 +89,7 @@ function handleStatistic() {
   api.getStatisticData(
     queryItems.value.uid,
     queryItems.value.uname,
+    queryItems.value.gift_name,
     queryItems.value.create_date,
   ).then(({ data }) => {
     statisticData.value = {
