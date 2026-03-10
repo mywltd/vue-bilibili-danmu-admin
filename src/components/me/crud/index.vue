@@ -15,7 +15,10 @@
           <i class="i-fe:search mr-4" />
           {{ $t('common.Search') }}
         </n-button>
-
+        <n-button v-if="getDataExport" attr-type="submit" class="ml-20" type="primary" :loading="loadingExport" @click="handleExport">
+          <i class="i-fe:export mr-4" />
+          {{ $t('common.Export') }}
+        </n-button>
         <template v-if="expand">
           <n-button v-if="!isExpanded" type="primary" text @click="toggleExpand">
             <i class="i-fe:chevrons-down ml-4" />
@@ -94,6 +97,14 @@ const props = defineProps({
   },
   /** 是否支持展开 */
   expand: Boolean,
+  /**
+   * 导出方法
+   * responseType 需要定义为 blob
+   */
+  getDataExport: {
+    type: Function,
+    required: false,
+  },
 })
 
 const emit = defineEmits(['update:queryItems', 'onChecked', 'onDataChange'])
@@ -101,6 +112,7 @@ const emit = defineEmits(['update:queryItems', 'onChecked', 'onDataChange'])
 const t = inject('t') // 注入 t 函数
 
 const loading = ref(false)
+const loadingExport = ref(false)
 const initQuery = { ...props.queryItems }
 const tableData = ref([])
 const pagination = reactive({
@@ -148,6 +160,29 @@ async function handleQuery() {
   }
 }
 
+async function handleExport() {
+  try {
+    loadingExport.value = true
+    const res = await props.getDataExport({
+      ...props.queryItems,
+    })
+    const blob = new Blob([res.data], { type: 'text/csv;charset=utf-8;' })
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    const disposition = res.headers['content-disposition']
+    link.download = getFilenameFromHeader(disposition)
+    link.click()
+    window.URL.revokeObjectURL(url)
+  }
+  catch (error) {
+    console.error(error)
+  }
+  finally {
+    loadingExport.value = false
+  }
+}
+
 function handleSearch(keepCurrentPage = false) {
   if (keepCurrentPage || !props.remote) {
     handleQuery()
@@ -176,6 +211,24 @@ function onChecked(rowKeys) {
   if (props.columns.some(item => item.type === 'selection')) {
     emit('onChecked', rowKeys)
   }
+}
+function getFilenameFromHeader(disposition) {
+  let filename = 'export.csv' // 默认值
+  if (!disposition)
+    return filename
+  // 现代浏览器优先使用 filename* UTF-8 编码
+  const utf8Match = disposition.match(/filename\*=UTF-8''([^;]+)/)
+  if (utf8Match && utf8Match[1]) {
+    filename = decodeURIComponent(utf8Match[1])
+  }
+  else {
+    // fallback 使用 filename
+    const asciiMatch = disposition.match(/filename="([^"]+)"/)
+    if (asciiMatch && asciiMatch[1]) {
+      filename = asciiMatch[1]
+    }
+  }
+  return filename
 }
 
 defineExpose({

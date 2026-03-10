@@ -19,20 +19,24 @@ export function setupInterceptors(axiosInstance) {
   const SUCCESS_CODES = [0, 200]
   function resResolve(response) {
     const { data, status, config, statusText, headers } = response
+    // 如果是导出文件 / blob，直接返回完整 response
+    if (config?.responseType === 'blob') {
+      return Promise.resolve(response)
+    }
+    // 原有逻辑：处理 JSON
     if (headers['content-type']?.includes('json')) {
       if (SUCCESS_CODES.includes(data?.code)) {
         return Promise.resolve(data)
       }
       const code = data?.code ?? status
       const needTip = config?.needTip !== false
-      // 根据code处理对应的操作，并返回处理后的message
+      // 根据 code 处理对应的操作，并返回处理后的 message
       const message = resolveResError(code, data?.message ?? statusText, needTip)
-
       return Promise.reject({ code, message, error: data ?? response })
     }
+    // 其他情况直接返回 data
     return Promise.resolve(data ?? response)
   }
-
   axiosInstance.interceptors.request.use(reqResolve, reqReject)
   axiosInstance.interceptors.response.use(resResolve, resReject)
 }
