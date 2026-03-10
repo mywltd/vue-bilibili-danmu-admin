@@ -30,7 +30,7 @@
 
     <MeCrud
       ref="$table" v-model:query-items="queryItems" :columns="tableColumns" :get-data="api.read"
-      @on-data-change="handleStatistic('onDataChange')"
+      :get-data-export="api.export" @on-data-change="handleStatistic('onDataChange')"
     >
       <MeQueryItem label="UID" :label-width="70">
         <n-input v-model:value="queryItems.uid" type="text" placeholder="可模糊搜索" clearable />
