@@ -407,6 +407,17 @@
               <p>设置为 0 时，所有礼物都会被感谢，包括免费的礼物。</p>
               <p>设置为 100 时，仅会感谢价格在 100 电池及以上的礼物，低于 100 电池的赠送将不会被感谢。</p>
             </n-alert>
+            <n-alert title="关于盲盒统计" class="mb-20" type="default" closable>
+              <template #icon>
+                <n-icon>
+                  <i class="i-fe:warning" />
+                </n-icon>
+              </template>
+              <p>开启盲盒统计后，用户赠送礼物时，若为盲盒礼物，则会在感谢信息后追加盲盒盈利信息，例如：</p>
+              <p>原本答谢信息为：感谢@name@赠送的的@giftName@~</p>
+              <p>开启后若用户赠送礼物为盲盒，则为：感谢@name@赠送的的@giftName@~ | 盲盒收益：2.00</p>
+              <p>若用户赠送的礼物非盲盒，则不论是否开启统计均不受影响</p>
+            </n-alert>
             <n-alert title="关于发送内容" class="mb-20" type="default" closable>
               <template #icon>
                 <n-icon>
@@ -890,6 +901,10 @@
         <p>发送人昵称：<b>@name@</b></p>
         <p>用户航海类型：<b>@guard@</b></p>
         <p>主播名称：<b>@up_name@</b></p>
+        <p>本日盲盒盈利：<b>@daily_blind_box_net@</b></p>
+        <p>本周盲盒盈利：<b>@weekly_blind_box_net@</b></p>
+        <p>本月盲盒盈利：<b>@monthly_blind_box_net@</b></p>
+        <p>总计盲盒盈利：<b>@total_blind_box_net@</b></p>
       </n-alert>
       <n-alert title="关于安全词" class="mb-20" type="default" closable>
         <template #icon>
