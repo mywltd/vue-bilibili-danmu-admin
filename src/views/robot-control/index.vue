@@ -440,6 +440,16 @@
                   </n-radio-button>
                 </n-radio-group>
               </n-form-item>
+              <n-form-item label="盲盒统计" path="blind_box_stats" feedback-style="margin-bottom: 20px;">
+                <n-radio-group v-model:value="presentForm.blind_box_stats" name="presentForm-blind_box_stats">
+                  <n-radio-button value="0">
+                    不显示
+                  </n-radio-button>
+                  <n-radio-button value="1">
+                    显示
+                  </n-radio-button>
+                </n-radio-group>
+              </n-form-item>
               <n-form-item label="起始感谢电池" path="price" feedback-style="margin-bottom: 20px;">
                 <n-input
                   v-model:value="presentForm.price" type="text" :allow-input="onlyAllowNumber"
@@ -1199,6 +1209,7 @@ const presentForm = ref({
   status: '0', // 状态：0=不论何时，1-仅在直播时，2-仅在非直播时
   type: '0', // 类型：0=全部答谢，1=仅答谢牌子，2=仅答谢航海
   content: '', // 内容
+  blind_box_stats: '0', // 是否统计盲盒收益：0=不显示，1=显示
 })
 const presentRules = ref({
   number: {
@@ -1215,6 +1226,15 @@ const presentRules = ref({
     validator(rule, value) {
       if (!value) {
         return new Error('[礼物答谢]请选择礼物是否合并')
+      }
+      return true
+    },
+  },
+  blind_box_stats: {
+    required: true,
+    validator(rule, value) {
+      if (!value) {
+        return new Error('[礼物答谢]请选择是否统计盲盒')
       }
       return true
     },
@@ -1768,6 +1788,7 @@ async function getConfig() {
     presentForm.value.status = String(data.present.status)
     presentForm.value.type = String(data.present.type)
     presentForm.value.content = data.present.content
+    presentForm.value.blind_box_stats = String(data.present.blind_box_stats)
     // 进房欢迎
     enterForm.value.opens = data.enter.opens
     enterForm.value.status = String(data.enter.status)
