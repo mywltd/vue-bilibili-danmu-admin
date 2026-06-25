@@ -901,10 +901,14 @@
         <p>发送人昵称：<b>@name@</b></p>
         <p>用户航海类型：<b>@guard@</b></p>
         <p>主播名称：<b>@up_name@</b></p>
-        <p>本日盲盒盈利：<b>@daily_blind_box_net@</b></p>
-        <p>本周盲盒盈利：<b>@weekly_blind_box_net@</b></p>
-        <p>本月盲盒盈利：<b>@monthly_blind_box_net@</b></p>
-        <p>总计盲盒盈利：<b>@total_blind_box_net@</b></p>
+        <p>用户本日盲盒盈利：<b>@daily_blind_box_net@</b></p>
+        <p>用户本周盲盒盈利：<b>@weekly_blind_box_net@</b></p>
+        <p>用户本月盲盒盈利：<b>@monthly_blind_box_net@</b></p>
+        <p>用户总计盲盒盈利：<b>@total_blind_box_net@</b></p>
+        <p>直播间本日盲盒盈利：<b>@daily_room_blind_box_net@</b></p>
+        <p>直播间本周盲盒盈利：<b>@weekly_room_blind_box_net@</b></p>
+        <p>直播间本月盲盒盈利：<b>@monthly_room_blind_box_net@</b></p>
+        <p>直播间总计盲盒盈利：<b>@total_room_blind_box_net@</b></p>
       </n-alert>
       <n-alert title="关于安全词" class="mb-20" type="default" closable>
         <template #icon>
