@@ -407,6 +407,16 @@
               <p>设置为 0 时，所有礼物都会被感谢，包括免费的礼物。</p>
               <p>设置为 100 时，仅会感谢价格在 100 电池及以上的礼物，低于 100 电池的赠送将不会被感谢。</p>
             </n-alert>
+            <n-alert title="关于最大昵称长度" class="mb-20" type="default" closable>
+              <template #icon>
+                <n-icon>
+                  <i class="i-fe:warning" />
+                </n-icon>
+              </template>
+              <p>在答谢内容中使用 @name@ 可自动替换为用户昵称。为避免因部分用户昵称过长导致感谢信息冗长，您可在此设置最大昵称长度。</p>
+              <p>设置为 0：不裁剪，展示完整昵称。</p>
+              <p>设置为 5：当昵称超过 5 个字时，仅显示前 5 个字符。</p>
+            </n-alert>
             <n-alert title="关于盲盒统计" class="mb-20" type="default" closable>
               <template #icon>
                 <n-icon>
@@ -465,6 +475,12 @@
                 <n-input
                   v-model:value="presentForm.price" type="text" :allow-input="onlyAllowNumber"
                   placeholder="为 0 则全部感谢"
+                />
+              </n-form-item>
+              <n-form-item label="最大昵称长度" path="name_length" feedback-style="margin-bottom: 20px;">
+                <n-input
+                  v-model:value="presentForm.name_length" type="text" :allow-input="onlyAllowNumber"
+                  placeholder="为 0 则不进行限制"
                 />
               </n-form-item>
               <n-form-item label="状态" path="status" feedback-style="margin-bottom: 20px;">
@@ -1225,6 +1241,7 @@ const presentForm = ref({
   number: '0', // 数量：0-不展示，1-展示
   merge: '0', // 礼物合并：0-不合并，1-合并
   price: '0', // 起始感谢电池数
+  name_length: '0', // 最大昵称长度
   status: '0', // 状态：0=不论何时，1-仅在直播时，2-仅在非直播时
   type: '0', // 类型：0=全部答谢，1=仅答谢牌子，2=仅答谢航海
   content: '', // 内容
@@ -1263,6 +1280,15 @@ const presentRules = ref({
     validator(rule, value) {
       if (!String(value).length) {
         return new Error('[礼物答谢]起始感谢电池不允许为空')
+      }
+      return true
+    },
+  },
+  name_length: {
+    required: true,
+    validator(rule, value) {
+      if (!String(value).length) {
+        return new Error('[礼物答谢]最大昵称长度不允许为空')
       }
       return true
     },
@@ -1804,6 +1830,7 @@ async function getConfig() {
     presentForm.value.number = String(data.present.number)
     presentForm.value.merge = String(data.present.merge)
     presentForm.value.price = String(data.present.price)
+    presentForm.value.name_length = String(data.present.name_length)
     presentForm.value.status = String(data.present.status)
     presentForm.value.type = String(data.present.type)
     presentForm.value.content = data.present.content
