@@ -28,15 +28,8 @@
           </template>
         </n-input>
 
-        <div class="mt-20 flex items-center">
-          <n-input
-            v-model:value="loginInfo.captcha" class="h-40 items-center"
-            :placeholder="$t('page.login.captchaPalceholder')" :maxlength="6" @keydown.enter="handleLogin()"
-          >
-            <template #prefix>
-              <i class="i-fe:key mr-12 opacity-20" />
-            </template>
-          </n-input>
+        <div v-if="isCaptcha" class="mt-20 flex items-center">
+          <altcha-widget type="checkbox" language="zh-cn" :challenge="challenge" class="w-full" @statechange="onStateChange" />
         </div>
 
         <n-checkbox
@@ -60,8 +53,10 @@
 import { useAuthStore } from '@/store'
 import { lStorage } from '@/utils'
 import { useStorage } from '@vueuse/core'
-import { inject } from 'vue'
+import { inject, onMounted } from 'vue'
 import api from './api'
+import 'altcha'
+import 'altcha/i18n/zh-cn'
 
 const t = inject('t') // 注入 t 函数
 
@@ -69,6 +64,8 @@ const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 const title = import.meta.env.VITE_TITLE
+const isCaptcha = ref(false)
+const challenge = `${import.meta.env.VITE_AXIOS_BASE_URL}/api/altcha/challenge`
 
 const loginInfo = ref({
   username: 'admin',
@@ -88,6 +85,8 @@ async function handleLogin() {
   const { username, password, captcha } = loginInfo.value
   if (!username || !password)
     return $message.warning(t('page.login.submitWarning'))
+  if (isCaptcha.value && !captcha)
+    return $message.warning(t('page.login.captchaPalceholder'))
   try {
     loading.value = true
     $message.loading(t('page.login.verifying'), { key: 'login' })
@@ -102,7 +101,6 @@ async function handleLogin() {
   }
   catch (error) {
     // 登陆失败的错误处理
-
     $message.destroy('login')
     console.error(error)
   }
@@ -131,4 +129,18 @@ async function onLoginSuccess(data = {}) {
     $message.destroy('login')
   }
 }
+
+function onStateChange(ev) {
+  switch (ev.detail.state) {
+    case 'verified':
+      loginInfo.value.captcha = ev.detail.payload
+      break
+  }
+}
+
+onMounted(() => {
+  api.isCaptcha().then(({ data }) => {
+    isCaptcha.value = !!data?.isCaptcha
+  })
+})
 </script>

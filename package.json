@@ -15,6 +15,7 @@
   "dependencies": {
     "@arco-design/color": "^0.4.0",
     "@vueuse/core": "^12.7.0",
+    "altcha": "^3.2.1",
     "axios": "^1.8.1",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",

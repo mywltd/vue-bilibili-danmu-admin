@@ -134,7 +134,7 @@
     "login": {
       "userPalceholder": "Please Enter Your Username",
       "passwordPalceholder": "Please Enter Your Password",
-      "captchaPalceholder": "Please Enter the Verification Code",
+      "captchaPalceholder": "Please complete the verification",
       "submit": "Log In",
       "remember": "Remember Me",
       "submitWarning": "Please Enter Your Username and Password",

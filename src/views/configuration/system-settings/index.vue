@@ -22,9 +22,21 @@
                 <n-input v-model:value="configForm.shop_url" placeholder="一般建议增加符号避免误触发，例如: #签到" />
                 <template #feedback>
                   <div style="font-size: 12px; color: #888;">
-                    <p>积分商城默认地址，如果需要通过域名进行访问，可以通过<a href="https://dc.console.aliyun.com" target="_blank"><n-gradient-text type="info">阿里云</n-gradient-text></a>或<a href="https://www.godaddy.com" target="_blank"><n-gradient-text type="info">godaddy</n-gradient-text></a>等其他任意平台注册域名，通常费用在每年几十元左右</p>
+                    <p>
+                      积分商城默认地址，如果需要通过域名进行访问，可以通过<a
+                        href="https://dc.console.aliyun.com"
+                        target="_blank"
+                      ><n-gradient-text type="info">阿里云</n-gradient-text></a>或<a
+                        href="https://www.godaddy.com" target="_blank"
+                      ><n-gradient-text
+                        type="info"
+                      >godaddy</n-gradient-text></a>等其他任意平台注册域名，通常费用在每年几十元左右
+                    </p>
                     <p class="mt-5">
-                      购买域名后解析到服务器后，就可以拥有一个网址链接供粉丝访问，教程出起来好麻烦，搞不懂可以直接<a href="mailto:junjie.he.925@gmail.com" target="_blank"><n-gradient-text type="info">联系作者</n-gradient-text></a>
+                      购买域名后解析到服务器后，就可以拥有一个网址链接供粉丝访问，教程出起来好麻烦，搞不懂可以直接<a
+                        href="mailto:junjie.he.925@gmail.com"
+                        target="_blank"
+                      ><n-gradient-text type="info">联系作者</n-gradient-text></a>
                     </p>
                   </div>
                 </template>
@@ -33,12 +45,19 @@
                 <n-image width="100%" :src="qrcodeUrl" />
                 <template #feedback>
                   <div style="font-size: 12px; color: #888;">
-                    <p>二维码扫描后可以打开商城地址，如果需要美化样式，可以前往<a href="https://cli.im/url" target="_blank"><n-gradient-text type="info">草料二维码</n-gradient-text></a>进行美化</p>
+                    <p>
+                      二维码扫描后可以打开商城地址，如果需要美化样式，可以前往<a href="https://cli.im/url" target="_blank"><n-gradient-text
+                        type="info"
+                      >草料二维码</n-gradient-text></a>进行美化
+                    </p>
                     <p class="mt-5">
                       通常情况下，微信，QQ等软件可能会限制IP类型地址或未备案域名链接的访问，因此需要告知用户通过系统自带扫码工具进行扫码
                     </p>
                     <p class="mt-5">
-                      如果无备案域名也想要用户在QQ/微信扫码访问，也可以直接<a href="mailto:junjie.he.925@gmail.com" target="_blank"><n-gradient-text type="info">联系作者</n-gradient-text></a>
+                      如果无备案域名也想要用户在QQ/微信扫码访问，也可以直接<a
+                        href="mailto:junjie.he.925@gmail.com"
+                        target="_blank"
+                      ><n-gradient-text type="info">联系作者</n-gradient-text></a>
                     </p>
                   </div>
                 </template>
@@ -232,6 +251,31 @@
             </n-form>
           </n-card>
         </div>
+        <!-- 功能模块：验证码配置 -->
+        <div ref="altchaConfigRef" class="mt-12">
+          <n-card id="altchaConfig" title="验证码配置">
+            <n-form
+              :model="configForm" :rules="configRules" label-placement="left" label-width="auto"
+              require-mark-placement="right-hanging" size="small"
+            >
+              <n-form-item label="登录验证码" path="altcha_hmac_key" class="mt-20">
+                <n-radio-group v-model:value="configForm.altcha_hmac_key" name="configForm-altcha_hmac_key">
+                  <n-radio-button value="0">
+                    关闭
+                  </n-radio-button>
+                  <n-radio-button value="1">
+                    开启
+                  </n-radio-button>
+                </n-radio-group>
+                <template #feedback>
+                  <div style="font-size: 12px; color: #888;">
+                    <p>开启后，后台登录时需要通过验证码验证，以增强登录安全性。</p>
+                  </div>
+                </template>
+              </n-form-item>
+            </n-form>
+          </n-card>
+        </div>
       </div>
       <div class="ml-12 min-w-200 w-30%">
         <div class="sticky top-0">
@@ -251,7 +295,13 @@
             <NButton type="primary" dashed class="mb-12 w-100%" @click="scrollToSection('databaseConfigRef')">
               数据库配置
             </NButton>
-            <NButton v-permission="'ConfigurationSystemSettingsEdit'" type="primary" class="mb-12 w-100%" :loading="setConfigLoading" @click="setConfig">
+            <NButton type="primary" dashed class="mb-12 w-100%" @click="scrollToSection('altchaConfigRef')">
+              验证码配置
+            </NButton>
+            <NButton
+              v-permission="'ConfigurationSystemSettingsEdit'" type="primary" class="mb-12 w-100%"
+              :loading="setConfigLoading" @click="setConfig"
+            >
               保存配置
             </NButton>
           </n-card>
@@ -283,6 +333,7 @@ const configForm = ref({
   db_user: '', // 数据库账号
   db_name: '', // 数据库名称
   db_password: '', // 数据库密码
+  altcha_hmac_key: '', // 数据库密码
 })
 const configRules = ref()
 
@@ -294,6 +345,8 @@ const redisConfigRef = ref()
 
 const databaseConfigRef = ref()
 
+const altchaConfigRef = ref()
+
 // 根据传入的 type 选择目标元素
 function scrollToSection(target) {
   const targetRefMap = {
@@ -302,6 +355,7 @@ function scrollToSection(target) {
     bootstrapConfigRef,
     redisConfigRef,
     databaseConfigRef,
+    altchaConfigRef,
   }
   const targetRef = targetRefMap[target]
   if (targetRef) {
@@ -346,6 +400,7 @@ async function getData() {
     configForm.value.db_user = data.db_user
     configForm.value.db_name = data.db_name
     configForm.value.db_password = data.db_password
+    configForm.value.altcha_hmac_key = data.altcha_hmac_key
     await getDataQrcode(configForm.value.shop_url)
     configLoading.value = false
   }
@@ -387,6 +442,7 @@ async function setConfig() {
       configForm.value.db_name,
       configForm.value.db_user,
       configForm.value.db_password,
+      configForm.value.altcha_hmac_key,
     )
     $message.success('保存成功')
   }

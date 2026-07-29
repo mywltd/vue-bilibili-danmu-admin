@@ -134,7 +134,7 @@
     "login": {
       "userPalceholder": "请输入用户名",
       "passwordPalceholder": "请输入密码",
-      "captchaPalceholder": "请输入验证码",
+      "captchaPalceholder": "请完成验证",
       "submit": "登录",
       "remember": "记住我",
       "submitWarning": "请输入用户名和密码",
