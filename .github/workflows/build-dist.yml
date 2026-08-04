@@ -55,7 +55,7 @@ jobs:
             API_URL="${{ vars.VITE_AXIOS_BASE_URL }}"
           fi
           if [ -z "$API_URL" ]; then
-            API_URL="https://example.com"
+            API_URL="https://bot.vuphub.fun"
           fi
 
           PUBLIC_PATH="${{ github.event.inputs.public_path }}"
