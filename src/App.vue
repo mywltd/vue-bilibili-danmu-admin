@@ -19,6 +19,9 @@
       </n-config-provider>
     </n-dialog-provider>
   </n-notification-provider>
+  <footer class="admin-beian">
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">京ICP备2026006931号</a>
+  </footer>
 </template>
 
 <script setup>
@@ -56,3 +59,31 @@ watchEffect(() => {
   appStore.setThemeColor(appStore.primaryColor, appStore.isDark)
 })
 </script>
+
+<style scoped>
+.admin-beian {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  padding: 4px 8px;
+  pointer-events: none;
+  background: transparent;
+}
+
+.admin-beian a {
+  pointer-events: auto;
+  font-size: 12px;
+  line-height: 20px;
+  color: #999;
+  text-decoration: none;
+}
+
+.admin-beian a:hover {
+  color: #666;
+  text-decoration: underline;
+}
+</style>
