@@ -1,0 +1,137 @@
+name: Build Dist
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'build/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.js'
+      - 'uno.config.*'
+      - 'index.html'
+      - '.env.example'
+      - '.github/workflows/build-dist.yml'
+  workflow_dispatch:
+    inputs:
+      api_url:
+        description: '后端 API 地址（写入 VITE_AXIOS_BASE_URL）'
+        required: false
+        default: ''
+      public_path:
+        description: '静态资源公共路径 VITE_PUBLIC_PATH'
+        required: false
+        default: '/dist/'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-dist-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Resolve build env
+        id: env
+        shell: bash
+        run: |
+          API_URL="${{ github.event.inputs.api_url }}"
+          if [ -z "$API_URL" ]; then
+            API_URL="${{ vars.VITE_AXIOS_BASE_URL }}"
+          fi
+          if [ -z "$API_URL" ]; then
+            API_URL="https://example.com"
+          fi
+
+          PUBLIC_PATH="${{ github.event.inputs.public_path }}"
+          if [ -z "$PUBLIC_PATH" ]; then
+            PUBLIC_PATH="${{ vars.VITE_PUBLIC_PATH }}"
+          fi
+          if [ -z "$PUBLIC_PATH" ]; then
+            PUBLIC_PATH="/dist/"
+          fi
+
+          TITLE="${{ vars.VITE_TITLE }}"
+          if [ -z "$TITLE" ]; then
+            TITLE="哔哩哔哩机器人"
+          fi
+
+          USE_HASH="${{ vars.VITE_USE_HASH }}"
+          if [ -z "$USE_HASH" ]; then
+            USE_HASH="true"
+          fi
+
+          {
+            echo "api_url=$API_URL"
+            echo "public_path=$PUBLIC_PATH"
+            echo "title=$TITLE"
+            echo "use_hash=$USE_HASH"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "Using VITE_AXIOS_BASE_URL=$API_URL"
+          echo "Using VITE_PUBLIC_PATH=$PUBLIC_PATH"
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build
+        env:
+          VITE_TITLE: ${{ steps.env.outputs.title }}
+          VITE_USE_HASH: ${{ steps.env.outputs.use_hash }}
+          VITE_PUBLIC_PATH: ${{ steps.env.outputs.public_path }}
+          VITE_AXIOS_BASE_URL: ${{ steps.env.outputs.api_url }}
+          VITE_PROXY_TARGET: ${{ steps.env.outputs.api_url }}
+        run: npm run build
+
+      - name: Pack dist
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          SHORT_SHA="${GITHUB_SHA::7}"
+          NAME="vue-bilibili-danmu-admin-dist"
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            ARCHIVE="${NAME}-${VERSION}.zip"
+          else
+            ARCHIVE="${NAME}-${SHORT_SHA}.zip"
+          fi
+          (
+            cd dist
+            zip -r "../${ARCHIVE}" .
+          )
+          cp "$ARCHIVE" "${NAME}-latest.zip"
+          echo "ARCHIVE=$ARCHIVE" >> "$GITHUB_ENV"
+          ls -lh ./*.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vue-bilibili-danmu-admin-dist
+          path: |
+            vue-bilibili-danmu-admin-dist-*.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload release assets
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            vue-bilibili-danmu-admin-dist-*.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

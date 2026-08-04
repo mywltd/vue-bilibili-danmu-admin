@@ -41,7 +41,24 @@
 
 ## 📦 使用说明
 
-> **本项目需要本地构建打包后上传部署，不建议在低配服务器上执行构建命令。**
+> **本项目需要本地构建打包后上传部署，不建议在低配服务器上执行构建命令。**  
+> 也可直接下载 GitHub Actions / Release 产出的 `dist` 压缩包。
+
+### 下载预构建包
+
+- **Actions 产物**：仓库 Actions → 选择成功的 `Build Dist` → Artifacts 下载 `vue-bilibili-danmu-admin-dist*.zip`（保留 30 天）
+- **Release 产物**：打 `v*` 标签后，在 Releases 页面下载同名 zip（长期可下）
+
+手动触发：Actions → Build Dist → Run workflow，可填写后端 API 地址与 `VITE_PUBLIC_PATH`。
+
+也可在仓库 Settings → Secrets and variables → Actions → **Variables** 配置默认值：
+
+| Variable | 说明 |
+|----------|------|
+| `VITE_AXIOS_BASE_URL` | 后端 API 地址 |
+| `VITE_PUBLIC_PATH` | 静态资源路径，默认 `/dist/` |
+| `VITE_TITLE` | 页面标题 |
+| `VITE_USE_HASH` | 是否 Hash 路由，默认 `true` |
 
 ### 1. 下载项目
 
