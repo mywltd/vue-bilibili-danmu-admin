@@ -1,6 +1,12 @@
 MIT License
 
 Copyright (c) 2023 Ronnie Zhang(大脸怪)
+Copyright (c) 2024 苏青安
+Copyright (c) 2026 魅影
+
+Based on vue-naive-admin by Ronnie Zhang.
+Adapted for php-bilibili-danmu by 苏青安 / 何俊杰.
+This repository is a fork with secondary modifications based on the original work.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

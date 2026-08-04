@@ -1,14 +1,14 @@
 <template>
   <footer class="f-c-c text-14 text-gray-500">
     <p>
-      Copyright © 2025
+      Copyright © 2026
       <a
-        href="https://github.com/zxc7563598/php-bilibili-danmu"
+        href="https://www.vuphub.fun"
         target="__blank"
         class="transition"
         hover="decoration-underline color-primary"
       >
-        何俊杰(星河避难所)
+        魅影
       </a>
     </p>
   </footer>

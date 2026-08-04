@@ -34,7 +34,7 @@
                     </p>
                     <p class="mt-5">
                       购买域名后解析到服务器后，就可以拥有一个网址链接供粉丝访问，教程出起来好麻烦，搞不懂可以直接<a
-                        href="mailto:junjie.he.925@gmail.com"
+                        href="https://www.vuphub.fun"
                         target="_blank"
                       ><n-gradient-text type="info">联系作者</n-gradient-text></a>
                     </p>
@@ -55,7 +55,7 @@
                     </p>
                     <p class="mt-5">
                       如果无备案域名也想要用户在QQ/微信扫码访问，也可以直接<a
-                        href="mailto:junjie.he.925@gmail.com"
+                        href="https://www.vuphub.fun"
                         target="_blank"
                       ><n-gradient-text type="info">联系作者</n-gradient-text></a>
                     </p>

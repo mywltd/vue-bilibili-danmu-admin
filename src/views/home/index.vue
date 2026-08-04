@@ -24,10 +24,10 @@
       <n-card class="ml-12 w-70%" title="🎉 欢迎使用哔哩哔哩直播机器人">
         <template #header-extra>
           <a
-            class="text-14 text-primary text-highlight hover:underline hover:opacity-80" href="https://hejunjie.life"
+            class="text-14 text-primary text-highlight hover:underline hover:opacity-80" href="https://www.vuphub.fun/"
             target="_blank"
           >
-            hejunjie.life
+            vuphub.fun
           </a>
         </template>
 
@@ -39,7 +39,7 @@
         </p>
         <footer class="mt-12 flex items-center justify-end">
           <NButton
-            type="primary" tertiary tag="a" href="https://github.com/zxc7563598/php-bilibili-danmu"
+            type="primary" tertiary tag="a" href="https://github.com/mywltd/php-bilibili-danmu"
             target="__blank"
           >
             <template #icon>
@@ -47,17 +47,11 @@
             </template>
             前往 GitHub 给作者点 Star
           </NButton>
-          <NButton type="primary" ghost class="ml-12" tag="a" href="https://hejunjie.life" target="__blank">
+          <NButton type="primary" ghost class="ml-12" tag="a" href="https://www.vuphub.fun" target="__blank">
             <template #icon>
               <i class="i-fe:link mr-5 text-12" />
             </template>
             前往作者个人网站
-          </NButton>
-          <NButton type="primary" class="ml-12" tag="a" href="mailto:junjie.he.925@gmail.com" target="__blank">
-            <template #icon>
-              <i class="i-fe:mail mr-5 text-12" />
-            </template>
-            直接给作者发送邮件
           </NButton>
         </footer>
       </n-card>
