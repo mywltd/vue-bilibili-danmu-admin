@@ -56,9 +56,9 @@
 | Variable | 说明 |
 |----------|------|
 | `VITE_AXIOS_BASE_URL` | 后端 API 地址 |
-| `VITE_PUBLIC_PATH` | 静态资源路径，默认 `/dist/` |
+| `VITE_PUBLIC_PATH` | 静态资源路径，默认 `/`（根路径部署） |
 | `VITE_TITLE` | 页面标题 |
-| `VITE_USE_HASH` | 是否 Hash 路由，默认 `true` |
+| `VITE_USE_HASH` | 是否 Hash 路由，默认 `false` |
 
 ### 1. 下载项目
 

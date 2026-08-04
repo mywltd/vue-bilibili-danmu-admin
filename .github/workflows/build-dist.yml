@@ -24,7 +24,7 @@ on:
       public_path:
         description: '静态资源公共路径 VITE_PUBLIC_PATH'
         required: false
-        default: '/dist/'
+        default: '/'
 
 permissions:
   contents: write
@@ -63,7 +63,7 @@ jobs:
             PUBLIC_PATH="${{ vars.VITE_PUBLIC_PATH }}"
           fi
           if [ -z "$PUBLIC_PATH" ]; then
-            PUBLIC_PATH="/dist/"
+            PUBLIC_PATH="/"
           fi
 
           TITLE="${{ vars.VITE_TITLE }}"
@@ -73,7 +73,7 @@ jobs:
 
           USE_HASH="${{ vars.VITE_USE_HASH }}"
           if [ -z "$USE_HASH" ]; then
-            USE_HASH="true"
+            USE_HASH="false"
           fi
 
           {
