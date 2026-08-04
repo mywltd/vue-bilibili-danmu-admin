@@ -68,8 +68,8 @@ const isCaptcha = ref(false)
 const challenge = `${import.meta.env.VITE_AXIOS_BASE_URL}/api/altcha/challenge`
 
 const loginInfo = ref({
-  username: 'admin',
-  password: '123456',
+  username: '',
+  password: '',
   captcha: '',
 })
 
