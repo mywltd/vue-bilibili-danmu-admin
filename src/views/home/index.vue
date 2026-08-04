@@ -126,8 +126,27 @@ import { NAvatar, NButton, NDescriptions, NDescriptionsItem, NText, useNotificat
 import version from '../../version.json'
 import api from './api'
 
+const VERSION_TIP_KEY = 'home_version_tip_seen'
+const UPDATE_LOGS_KEY = 'home_update_logs_seen'
+
 const userStore = useUserStore()
 const notification = useNotification()
+
+function getSeenLogIds() {
+  try {
+    const raw = localStorage.getItem(UPDATE_LOGS_KEY)
+    const ids = raw ? JSON.parse(raw) : []
+    return Array.isArray(ids) ? ids : []
+  }
+  catch {
+    return []
+  }
+}
+
+function markLogsSeen(ids) {
+  const merged = new Set([...getSeenLogIds(), ...ids])
+  localStorage.setItem(UPDATE_LOGS_KEY, JSON.stringify([...merged]))
+}
 
 function handleNotification(logs) {
   notification.create({
@@ -155,9 +174,6 @@ function handleNotification(logs) {
       round: true,
       src: `${import.meta.env.BASE_URL}avatar.jpg`,
     }),
-    onAfterLeave: () => {
-      api.readUpdateLogs(logs.id)
-    },
   })
 }
 
@@ -199,10 +215,25 @@ function handleVersion(new_version) {
 
 function getUpdateLogs() {
   api.getUpdateLogs().then(({ data }) => {
-    handleVersion(data.logs?.[0]?.version)
-    data.logs.forEach((logs) => {
-      handleNotification(logs)
+    const logs = data.logs || []
+    const latestVersion = data.latest_version || logs[0]?.version
+
+    // 版本提示：同一最新版本只展示一次
+    if (latestVersion && localStorage.getItem(VERSION_TIP_KEY) !== latestVersion) {
+      handleVersion(latestVersion)
+      localStorage.setItem(VERSION_TIP_KEY, latestVersion)
+    }
+
+    // 更新日志：浏览器本地记录已展示过的 id，只展示一次
+    const seenIds = new Set(getSeenLogIds())
+    const toShow = logs.filter(log => !seenIds.has(log.id))
+    toShow.forEach((log) => {
+      handleNotification(log)
+      api.readUpdateLogs(log.id)
     })
+    if (toShow.length) {
+      markLogsSeen(toShow.map(log => log.id))
+    }
   })
 }
 
